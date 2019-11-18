@@ -23,15 +23,6 @@ class VideoHandler extends BaseHandler {
 
     this.embedFile(file);
   }
-
-  insertFileToEditor(url, id) {
-    const el = document.getElementById(id);
-    if (el) {
-      el.setAttribute("src", url);
-      el.removeAttribute("id");
-      el.classList.remove(Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME);
-    }
-  }
 }
 
 export default VideoHandler;

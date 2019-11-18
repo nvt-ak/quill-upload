@@ -85,6 +85,15 @@ class BaseHandler {
     );
   }
 
+  insertFileToEditor(url) {
+    const el = document.getElementById(this.handlerId);
+    if (el) {
+      el.setAttribute("src", url);
+      el.removeAttribute("id");
+      el.classList.remove(Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME);
+    }
+  }
+
   isImage(extension) {
     return /(gif|jpg|jpeg|tiff|png)$/i.test(extension);
   }
