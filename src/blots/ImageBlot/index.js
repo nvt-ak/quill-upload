@@ -24,6 +24,7 @@ class ImageBlot extends BlockEmbed {
     if (id) {
       node.setAttribute("id", id);
     }
+
     return node;
   }
 
@@ -37,6 +38,7 @@ class ImageBlot extends BlockEmbed {
 
 ImageBlot.tagName = "img";
 ImageBlot.blotName = Constants.blots.image;
+ImageBlot.className = Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME;
 
 Quill.register(ImageBlot);
 

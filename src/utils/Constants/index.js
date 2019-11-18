@@ -2,6 +2,7 @@ export default {
   ID_SPLIT_FLAG: "__ID_SPLIT__",
   IMAGE_LOADING_CLASS_NAME: "image-loading-for-quill-upload",
   VIDEO_LOADING_CLASS_NAME: "video-loading-for-quill-upload",
+  QUILL_UPLOAD_HOLDER_CLASS_NAME: "quill-upload-progress",
   DEFAULT_STYLES: `
     .image-loading-for-quill-upload {
       display: inline-block;
@@ -25,6 +26,7 @@ export default {
       position: relative;
       background: #f3efe6;
       overflow: hidden;
+      margin-top: -35px;
     }
     
     .meter span {
@@ -45,6 +47,10 @@ export default {
 
     .none-display {
       display: none;
+    }
+
+    .quill-upload-progress {
+      opacity: 0.3;
     }
   `,
   blots: {

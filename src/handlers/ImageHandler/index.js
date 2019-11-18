@@ -29,7 +29,7 @@ class ImageHandler extends BaseHandler {
     if (el) {
       el.setAttribute("src", url);
       el.removeAttribute("id");
-      el.classList.remove(Constants.IMAGE_LOADING_CLASS_NAME);
+      el.classList.remove(Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME);
     }
   }
 }

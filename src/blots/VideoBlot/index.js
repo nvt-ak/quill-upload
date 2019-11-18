@@ -63,6 +63,7 @@ class VideoBlot extends BlockEmbed {
 
 VideoBlot.tagName = "iframe";
 VideoBlot.blotName = Constants.blots.video;
+VideoBlot.className = Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME;
 
 Quill.register(VideoBlot);
 

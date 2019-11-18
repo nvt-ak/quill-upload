@@ -9,12 +9,10 @@ class BaseHandler {
     this.range = null;
     new Styled().apply();
 
-    const el = document.getElementById("editor");
-
     let node = document.createElement("div");
     node.innerHTML = Helpers.loadingHTML();
 
-    el.appendChild(node);
+    this.quill.container.appendChild(node);
 
     if (typeof this.options.upload !== "function")
       console.warn(
