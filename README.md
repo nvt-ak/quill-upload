@@ -17,10 +17,11 @@ npm install quill-upload --save
 ```js
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import { imageHandler, videoHandler } from "quill-upload";
+import { ImageHandler, VideoHandler } from "quill-upload";
 
 // register quill-upload
-Quill.register("modules/imageHandler", imageHandler);
+Quill.register("modules/imageHandler", ImageHandler);
+Quill.register("modules/videoHandler", VideoHandler);
 
 new Quill("#editor", {
   theme: "snow",
