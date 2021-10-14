@@ -34,7 +34,7 @@ export default {
       height: 100%;
     }
     
-    .progress {
+    .quill-progress {
       background-color: #e4c465;
       animation: progressBar 40s ease-in-out;
       animation-fill-mode:both;
@@ -55,8 +55,8 @@ export default {
   `,
   blots: {
     video: "video",
-    image: "image"
+    image: "image",
   },
   LOADING_CLASS_NAME: "meter",
-  NONE_DISPLAY_CLASS_NAME: "none-display"
+  NONE_DISPLAY_CLASS_NAME: "none-display",
 };

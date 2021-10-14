@@ -1,4 +1,5 @@
 const Quill = require("quill");
+Quill.debug("error");
 require("quill/dist/quill.snow.css");
 const { ImageHandler, VideoHandler } = require("quill-upload");
 
@@ -24,15 +25,15 @@ const quill = new Quill("#editor", {
 
         { indent: "-1" },
         { align: [] },
-        { indent: "+1" }
+        { indent: "+1" },
       ],
       ["link", "image", "video"],
       ["blockquote", "code-block"],
       [{ script: "sub" }, { script: "super" }], // superscript/subscript
-      [{ color: [] }, { background: [] }] // outdent/indent
+      [{ color: [] }, { background: [] }], // outdent/indent
     ],
     imageHandler: {
-      upload: file => {
+      upload: (file) => {
         // return a Promise that resolves in a link to the uploaded image
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -51,10 +52,10 @@ const quill = new Quill("#editor", {
           // };
           // xhr.send(fd);
         });
-      }
+      },
     },
     videoHandler: {
-      upload: file => {
+      upload: (file) => {
         // return a Promise that resolves in a link to the uploaded image
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -73,12 +74,12 @@ const quill = new Quill("#editor", {
           // };
           // xhr.send(fd);
         });
-      }
-    }
+      },
+    },
   },
-  placeholder: "please write something..."
+  placeholder: "please write something...",
 });
 
-document.getElementById("output").onclick = function() {
+document.getElementById("output").onclick = function () {
   console.log(quill.root.innerHTML);
 };

@@ -1,50 +1,56 @@
-const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: {
-    workboard: './src/index.js'
+    workboard: "./src/index.js",
   },
   output: {
-    filename: 'index.[chunkhash].js',
-    path: path.resolve(__dirname, 'dist')
+    filename: "index.[chunkhash].js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  mode: "development",
+  resolve: {
+    fallback: { path: require.resolve("path-browserify") },
   },
   module: {
     rules: [
-      // {
-      //   enforce: "pre",
-      //   test: /\.js$/,
-      //   exclude: /node_modules/,
-      //   loader: "eslint-loader",
-      // },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015'],
+        loader: "babel-loader",
+        options: {
+          presets: ["@babel/preset-env"],
         },
       },
-    ]
+    ],
   },
   devServer: {
-    contentBase: './dist'
+    static: "./dist",
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true,
+          },
+        },
+      }),
+    ],
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      // chunks: ['workboard'],
-      filename: 'index.html'
+      template: "./src/index.html",
+      filename: "index.html",
     }),
-    new UglifyJSPlugin()
-  ]
+    new UglifyJSPlugin(),
+  ],
 };
