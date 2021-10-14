@@ -1,6 +1,6 @@
 {
   "name": "quill-upload",
-  "version": "0.0.2-rc.1",
+  "version": "0.0.5-rc.1",
   "description": "Handler Upload for Quill",
   "main": "src/index.js",
   "scripts": {
