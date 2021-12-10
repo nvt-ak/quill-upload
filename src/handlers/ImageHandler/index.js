@@ -1,6 +1,9 @@
-import BaseHandler from "../BaseHandler";
-import { ImageBlot } from "../../blots";
 import { Constants } from "../../utils";
+import BaseHandler from "../BaseHandler";
+import Quill from "quill";
+import { ImageBlot } from "../../blots";
+
+Quill.register("blots/image", ImageBlot);
 
 class ImageHandler extends BaseHandler {
   constructor(quill, options) {

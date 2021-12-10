@@ -11,8 +11,7 @@ export default {
   },
   loadingHTML: function () {
     return `<div id="${Constants.ID_SPLIT_FLAG}.QUILL-LOADING">
-                        <span style="width:80%;"><span class="quill-progress">
-                        </span></span>
-                      </div>`;
+              <span class="quill-progress"></span>
+            </div>`;
   },
 };

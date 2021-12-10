@@ -31,7 +31,7 @@ class ImageBlot extends BlockEmbed {
   static value(node) {
     return {
       alt: node.getAttribute("alt"),
-      url: node.getAttribute("src")
+      url: node.getAttribute("src"),
     };
   }
 }
@@ -39,7 +39,5 @@ class ImageBlot extends BlockEmbed {
 ImageBlot.tagName = "img";
 ImageBlot.blotName = Constants.blots.image;
 ImageBlot.className = Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME;
-
-Quill.register(ImageBlot);
 
 export default ImageBlot;

@@ -1,7 +1,9 @@
-import BaseHandler from "../BaseHandler";
+import Quill from "quill";
 import { VideoBlot } from "../../blots";
 import { Constants } from "../../utils";
+import BaseHandler from "../BaseHandler";
 
+Quill.register("blots/video", VideoBlot);
 class VideoHandler extends BaseHandler {
   constructor(quill, options) {
     super(quill, options);

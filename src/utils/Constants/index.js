@@ -37,12 +37,7 @@ export default {
     .quill-progress {
       background-color: #e4c465;
       animation: progressBar 40s ease-in-out;
-      animation-fill-mode:both;
-    }
-    
-    @keyframes progressBar {
-      0% { width: 0; }
-      100% { width: 100%; }
+      animation-fill-mode: both;
     }
 
     .none-display {

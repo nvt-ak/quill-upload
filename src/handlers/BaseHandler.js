@@ -1,6 +1,5 @@
+import { Constants, Helpers } from "../utils";
 import Styled from "./Styled";
-import path from "path";
-import { Helpers, Constants } from "../utils";
 
 class BaseHandler {
   constructor(quill, options) {
@@ -9,10 +8,16 @@ class BaseHandler {
     this.range = null;
     new Styled().apply();
 
-    let node = document.createElement("div");
-    node.innerHTML = Helpers.loadingHTML();
+    this.loading = document.getElementById(
+      `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
+    );
 
-    this.quill.container.appendChild(node);
+    if (!this.loading) {
+      let node = document.createElement("div");
+      node.innerHTML = Helpers.loadingHTML();
+
+      this.quill.container.appendChild(node);
+    }
 
     if (typeof this.options.upload !== "function")
       console.warn(
@@ -25,7 +30,9 @@ class BaseHandler {
     this.loading = document.getElementById(
       `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
     );
-    toolbar.addHandler(this.handler, this.selectLocalFile.bind(this));
+
+    if (toolbar)
+      toolbar.addHandler(this.handler, this.selectLocalFile.bind(this));
   }
 
   selectLocalFile() {
@@ -37,9 +44,74 @@ class BaseHandler {
     this.fileHolder.click();
   }
 
+  findKeyframesRule(rule) {
+    var ss = document.styleSheets;
+    const _keyframes = [];
+
+    for (var i = 0; i < ss.length; ++i) {
+      for (var j = 0; j < ss[i].cssRules.length; ++j) {
+        if (
+          ss[i].cssRules[j].type == window.CSSRule.WEBKIT_KEYFRAMES_RULE &&
+          ss[i].cssRules[j].name.includes(rule)
+        ) {
+          _keyframes.push(ss[i].cssRules[j]);
+        }
+      }
+    }
+
+    return _keyframes;
+  }
+
+  updateProgress(action) {
+    const _ruleName = `progressBar-${new Date().getTime()}`;
+
+    const _rule = `@keyframes ${_ruleName} {
+                    0% { width: 0%; }
+                    100% { width: 70%; }
+                  }`;
+    const _children = this.loading.children;
+    if (!_children) return;
+
+    const _progress = _children[0];
+    if (!_progress) return;
+    const _lastStyleSheet =
+      document.styleSheets[document.styleSheets.length - 1];
+
+    if (action === "start") {
+      _lastStyleSheet.insertRule(_rule, _lastStyleSheet.cssRules.length);
+      _progress.style = `animation: ${_ruleName} 5s ease-in-out; animation-fill-mode: both;`;
+
+      return;
+    }
+
+    var keyframes = this.findKeyframesRule("progressBar");
+
+    var keyframeString = [];
+    for (var i = 0; i < keyframes.length; i++) {
+      keyframeString.push(keyframes[i].keyText);
+    }
+
+    for (var i = 0, j = keyframeString.length; i < j; i++) {
+      keyframes.deleteRule(keyframeString[i]);
+    }
+  }
+
+  removeLoadingClass() {
+    if (this.loading) {
+      this.loading.removeAttribute("class");
+      this.updateProgress("finish");
+    }
+  }
+
+  startLoading() {
+    if (this.loading) {
+      this.loading.setAttribute("class", Constants.LOADING_CLASS_NAME);
+      this.updateProgress("start");
+    }
+  }
+
   loadFile(context) {
-    this.loading.removeAttribute("class");
-    this.loading.setAttribute("class", Constants.LOADING_CLASS_NAME);
+    this.startLoading();
 
     const file = context.fileHolder.files[0];
     this.handlerId = Helpers.generateID();
@@ -65,12 +137,11 @@ class BaseHandler {
 
   embedFile(file) {
     this.options.upload(file).then(
-      url => {
+      (url) => {
         this.insertFileToEditor(url);
-        this.loading.removeAttribute("class");
-        this.loading.setAttribute("class", Constants.NONE_DISPLAY_CLASS_NAME);
+        this.removeLoadingClass();
       },
-      error => {
+      (error) => {
         console.warn(error.message);
       }
     );
@@ -99,7 +170,7 @@ class BaseHandler {
   }
 
   isVideo(extension) {
-    return /(mp4|m4a|3gp|f4a|m4b|m4r|f4b|mov|flv|avi|ogg)$/i;
+    return /(mp4|m4a|3gp|f4a|m4b|m4r|f4b|mov|flv|avi|ogg)$/i.test(extension);
   }
 }
 
