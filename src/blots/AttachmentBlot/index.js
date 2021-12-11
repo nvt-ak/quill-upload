@@ -1,5 +1,5 @@
 import Quill from "quill";
-import { Constants } from "../../utils";
+import { Constants, Helpers } from "../../utils";
 
 let BlockEmbed = Quill.import("blots/block/embed");
 
@@ -16,26 +16,23 @@ class AttachmentBlot extends BlockEmbed {
       href = value;
     }
 
-    let node = super.create(href);
-    if (typeof href === "string") {
-      node.setAttribute("href", href);
-    }
+    let node = super.create("div");
 
     if (id) {
+      node.innerHTML = Helpers.attachmentHTML();
       node.setAttribute("id", id);
+      node.style = Constants.ATTACHMENT_WRAPPER_STYLE;
     }
 
     return node;
   }
 
   static value(node) {
-    return {
-      url: node.getAttribute("href"),
-    };
+    return node.getAttribute("data-url");
   }
 }
 
-AttachmentBlot.tagName = "a";
+AttachmentBlot.tagName = "div";
 AttachmentBlot.blotName = Constants.blots.attachment;
 AttachmentBlot.className = Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME;
 

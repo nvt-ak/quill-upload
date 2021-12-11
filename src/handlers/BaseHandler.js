@@ -51,10 +51,12 @@ class BaseHandler {
   }
 
   selectLocalFile() {
+    const _accpepted =
+      this.handler === "attachment" ? "*" : `${this.handler}/*`;
     this.range = this.quill.getSelection();
     this.fileHolder = document.createElement("input");
     this.fileHolder.setAttribute("type", "file");
-    this.fileHolder.setAttribute("accept", `${this.handler}/*`);
+    this.fileHolder.setAttribute("accept", _accpepted);
     this.fileHolder.onchange = this.fileChanged.bind(this);
     this.fileHolder.click();
   }
@@ -188,8 +190,8 @@ class BaseHandler {
     return /(mp4|m4a|3gp|f4a|m4b|m4r|f4b|mov|flv|avi|ogg)$/i.test(extension);
   }
 
-  isNotAttachment(extension) {
-    return this.isImage(extension) || this.isVideo(extension);
+  isAttachment(extension) {
+    return extension instanceof String;
   }
 }
 

@@ -8,27 +8,33 @@ class AttachmentHandler extends BaseHandler {
   constructor(quill, options) {
     super(quill, options);
 
-    this.handler = Constants.blots.link;
+    this.handler = Constants.blots.attachment;
     this.applyForToolbar();
   }
 
   insertFileToEditor(url) {
     const el = document.getElementById(this.handlerId);
     if (el) {
-      el.setAttribute("src", url);
-      el.setAttribute("data-url", url);
       el.removeAttribute("id");
       el.classList.remove(Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME);
+
+      if (url) {
+        const _filename = url?.split("/").pop();
+
+        if (_filename && el.firstElementChild) {
+          el.firstElementChild.setAttribute("href", url);
+          el.firstElementChild.textContent = _filename;
+        }
+      }
     }
   }
 
   fileChanged() {
     const file = this.loadFile(this);
-    const extension = file.name.split(".").pop();
 
-    if (this.isNotAttachment(extension)) {
+    if (!file) {
       console.warn(
-        "[Wrong Format] Format was wrong, please try with video format correctly!!"
+        "[File not selected] File is missing, please try to select file again!"
       );
       return;
     }
