@@ -26,6 +26,8 @@ class BaseHandler {
   }
 
   appendAttachmentIcon() {
+    const _elements = document.getElementsByClassName("ql-attachment");
+
     if (_elements.length > 0) {
       let node = document.createElement("svg");
       node.innerHTML = Helpers.attachmentIconHTML();
@@ -38,16 +40,14 @@ class BaseHandler {
 
   applyForToolbar() {
     var toolbar = this.quill.getModule("toolbar");
+    this.appendAttachmentIcon();
+
     this.loading = document.getElementById(
       `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
     );
 
     if (toolbar)
       toolbar.addHandler(this.handler, this.selectLocalFile.bind(this));
-
-    const _elements = document.getElementsByClassName("ql-attachment");
-
-    this.appendAttachmentIcon();
   }
 
   selectLocalFile() {
