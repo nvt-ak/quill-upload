@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/john-techfox/quill-upload/issues"
   },
+  "publishConfig": {
+    "registry":"https://www.npmjs.com/package/quill-upload"
+  },
   "homepage": "https://github.com/john-techfox/quill-upload#readme"
 }
