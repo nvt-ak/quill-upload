@@ -25,6 +25,17 @@ class BaseHandler {
       );
   }
 
+  appendAttachmentIcon() {
+    if (_elements.length > 0) {
+      let node = document.createElement("svg");
+      node.innerHTML = Helpers.attachmentIconHTML();
+      const _element = _elements[0];
+      if (!_element) return;
+
+      if (_element?.children.length <= 0) _elements[0].appendChild(node);
+    }
+  }
+
   applyForToolbar() {
     var toolbar = this.quill.getModule("toolbar");
     this.loading = document.getElementById(
@@ -33,6 +44,10 @@ class BaseHandler {
 
     if (toolbar)
       toolbar.addHandler(this.handler, this.selectLocalFile.bind(this));
+
+    const _elements = document.getElementsByClassName("ql-attachment");
+
+    this.appendAttachmentIcon();
   }
 
   selectLocalFile() {
@@ -92,7 +107,7 @@ class BaseHandler {
     }
 
     for (var i = 0, j = keyframeString.length; i < j; i++) {
-      keyframes.deleteRule(keyframeString[i]);
+      _lastStyleSheet.deleteRule(keyframeString[i]);
     }
   }
 
@@ -171,6 +186,10 @@ class BaseHandler {
 
   isVideo(extension) {
     return /(mp4|m4a|3gp|f4a|m4b|m4r|f4b|mov|flv|avi|ogg)$/i.test(extension);
+  }
+
+  isNotAttachment(extension) {
+    return this.isImage(extension) || this.isVideo(extension);
   }
 }
 

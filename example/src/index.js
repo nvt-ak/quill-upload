@@ -1,10 +1,15 @@
 const Quill = require("quill");
 Quill.debug("error");
 require("quill/dist/quill.snow.css");
-const { ImageHandler, VideoHandler } = require("quill-upload");
+const {
+  ImageHandler,
+  VideoHandler,
+  AttachmentHandler,
+} = require("quill-upload");
 
 Quill.register("modules/imageHandler", ImageHandler);
 Quill.register("modules/videoHandler", VideoHandler);
+Quill.register("modules/attachmentHandler", AttachmentHandler);
 
 var Block = Quill.import("blots/block");
 Block.tagName = "DIV";
@@ -43,7 +48,7 @@ const quill = new Quill("#editor", {
         { align: [] },
         { indent: "+1" },
       ],
-      ["link", "image", "video"],
+      ["link", "image", "video", "attachment"],
       ["blockquote", "code-block"],
       [{ script: "sub" }, { script: "super" }], // superscript/subscript
       [{ color: [] }, { background: [] }], // outdent/indent
