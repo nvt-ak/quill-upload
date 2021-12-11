@@ -25,8 +25,23 @@ class BaseHandler {
       );
   }
 
+  appendAttachmentIcon() {
+    const _elements = document.getElementsByClassName("ql-attachment");
+
+    if (_elements.length > 0) {
+      let node = document.createElement("svg");
+      node.innerHTML = Helpers.attachmentIconHTML();
+      const _element = _elements[0];
+      if (!_element) return;
+
+      if (_element?.children.length <= 0) _elements[0].appendChild(node);
+    }
+  }
+
   applyForToolbar() {
     var toolbar = this.quill.getModule("toolbar");
+    this.appendAttachmentIcon();
+
     this.loading = document.getElementById(
       `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
     );
@@ -36,10 +51,12 @@ class BaseHandler {
   }
 
   selectLocalFile() {
+    const _accpepted =
+      this.handler === "attachment" ? "*" : `${this.handler}/*`;
     this.range = this.quill.getSelection();
     this.fileHolder = document.createElement("input");
     this.fileHolder.setAttribute("type", "file");
-    this.fileHolder.setAttribute("accept", `${this.handler}/*`);
+    this.fileHolder.setAttribute("accept", _accpepted);
     this.fileHolder.onchange = this.fileChanged.bind(this);
     this.fileHolder.click();
   }
@@ -92,7 +109,7 @@ class BaseHandler {
     }
 
     for (var i = 0, j = keyframeString.length; i < j; i++) {
-      keyframes.deleteRule(keyframeString[i]);
+      _lastStyleSheet.deleteRule(keyframeString[i]);
     }
   }
 
@@ -171,6 +188,10 @@ class BaseHandler {
 
   isVideo(extension) {
     return /(mp4|m4a|3gp|f4a|m4b|m4r|f4b|mov|flv|avi|ogg)$/i.test(extension);
+  }
+
+  isAttachment(extension) {
+    return extension instanceof String;
   }
 }
 
