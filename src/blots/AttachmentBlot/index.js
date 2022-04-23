@@ -6,9 +6,8 @@ let BlockEmbed = Quill.import("blots/block/embed");
 class AttachmentBlot extends BlockEmbed {
   static create(value) {
     let id;
-    let href;
 
-    const arr = value.split(Constants.ID_SPLIT_FLAG);
+    const arr = `${value}`.split(Constants.ID_SPLIT_FLAG);
     if (arr.length > 1) {
       id = arr[0];
       href = arr[1];
