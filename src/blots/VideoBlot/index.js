@@ -7,7 +7,7 @@ class VideoBlot extends BlockEmbed {
     let id;
     let src;
 
-    const arr = value.split(Constants.ID_SPLIT_FLAG);
+    const arr = `${value}`.split(Constants.ID_SPLIT_FLAG);
     if (arr.length > 1) {
       id = arr[0];
       src = arr[1];

@@ -1,6 +1,6 @@
 {
   "name": "quill-upload",
-  "version": "0.0.7-rc.1",
+  "version": "0.0.7-rc.2",
   "description": "Handler Upload for Quill",
   "main": "src/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "url": "https://github.com/john-techfox/quill-upload/issues"
   },
   "publishConfig": {
-    "registry":"https://www.npmjs.com/package/quill-upload"
+    "registry": "https://www.npmjs.com/package/quill-upload"
   },
   "homepage": "https://github.com/john-techfox/quill-upload#readme"
 }
