@@ -183,7 +183,7 @@ class BaseHandler {
   }
 
   isImage(extension) {
-    return /(gif|jpg|jpeg|tiff|png)$/i.test(extension);
+    return /(gif|jpg|jpeg|tiff|png|webp|jfif)$/i.test(extension);
   }
 
   isVideo(extension) {
