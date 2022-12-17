@@ -16,6 +16,9 @@ class AttachmentBlot extends BlockEmbed {
     }
 
     let node = super.create("div");
+    if (typeof href === "string") {
+      node.setAttribute("href", href);
+    }
 
     if (id) {
       node.innerHTML = Helpers.attachmentHTML();
@@ -27,7 +30,7 @@ class AttachmentBlot extends BlockEmbed {
   }
 
   static value(node) {
-    return node.getAttribute("data-url");
+    return node.getAttribute("href");
   }
 }
 
