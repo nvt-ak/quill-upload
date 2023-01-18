@@ -20,7 +20,7 @@ export default {
   },
   attachmentHTML: function () {
     return `
-      <a style="flex: 1; text-overflow: ellipsis; white-space: nowrap; overflow-x: hidden;" href="#" target="_blank" download>Đang tải...</a>
+      <a style="flex: 1; text-overflow: ellipsis; white-space: nowrap; overflow-x: hidden;" href="#" target="_blank" download>Speichert ..</a>
       <button onclick="
         function removeAttachmentNode(element) {
           if (element && element.parentElement) element.parentElement.remove();
