@@ -55,14 +55,4 @@ export default {
   },
   LOADING_CLASS_NAME: "meter",
   NONE_DISPLAY_CLASS_NAME: "none-display",
-  ATTACHMENT_WRAPPER_STYLE: `
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 10px;
-    background-color: aliceblue;
-    border-radius: 4px;
-    max-width: 200px;
-    cursor: pointer;
-  `,
 };

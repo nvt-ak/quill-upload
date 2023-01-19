@@ -24,7 +24,6 @@ class AttachmentBlot extends BlockEmbed {
     if (id) {
       node.innerHTML = Helpers.attachmentHTML();
       node.setAttribute("id", id);
-      node.style = Constants.ATTACHMENT_WRAPPER_STYLE;
     }
 
     return node;
