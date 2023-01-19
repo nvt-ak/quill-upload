@@ -24,7 +24,7 @@ export default {
     .meter {
       height: 5px;
       position: relative;
-      background: #f3efe6;
+      background: #eff5fb;
       overflow: hidden;
       margin-top: -35px;
     }
@@ -35,7 +35,7 @@ export default {
     }
     
     .quill-progress {
-      background-color: #e4c465;
+      background-color: #051d38;
       animation: progressBar 40s ease-in-out;
       animation-fill-mode: both;
     }
