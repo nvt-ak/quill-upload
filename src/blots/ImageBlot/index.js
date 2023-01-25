@@ -8,12 +8,16 @@ class ImageBlot extends BlockEmbed {
     let id;
     let src;
 
-    const arr = `${value}`.split(Constants.ID_SPLIT_FLAG);
-    if (arr.length > 1) {
-      id = arr[0];
-      src = arr[1];
+    if(typeof value === "string"){
+        const arr = `${value}`.split(Constants.ID_SPLIT_FLAG);
+        if (arr.length > 1) {
+          id = arr[0];
+          src = arr[1];
+        } else {
+          src = value;
+        }
     } else {
-      src = value;
+      src = value.url
     }
 
     let node = super.create(src);
