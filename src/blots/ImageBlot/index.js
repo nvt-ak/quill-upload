@@ -42,6 +42,6 @@ class ImageBlot extends BlockEmbed {
 
 ImageBlot.tagName = "img";
 ImageBlot.blotName = Constants.blots.image;
-ImageBlot.className = Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME;
+ImageBlot.className = "image-upload"// Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME;
 
 export default ImageBlot;
