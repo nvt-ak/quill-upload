@@ -64,6 +64,19 @@ class BaseHandler {
     }
   }
 
+  changeVideoIcon() {
+    const _elements = document.getElementsByClassName("ql-video");
+
+    if (_elements.length > 0) {
+      let node = document.createElement("svg");
+      node.innerHTML = Helpers.youtubeIconHTML();
+      const _element = _elements[0];
+      if (!_element) return;
+
+      if (_element?.children.length <= 0) _elements[0].appendChild(node);
+    }
+  }
+
   applyForToolbar() {
     var toolbar = this.quill.getModule("toolbar");
     this.appendAttachmentIcon();
