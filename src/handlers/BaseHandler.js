@@ -26,7 +26,33 @@ class BaseHandler {
   }
 
   appendAttachmentIcon() {
-    const _elements = document.getElementsByClassName("ql-attachment");
+    const _elements = document.getElementsByClassName("ql-attachmentupload");
+
+    if (_elements.length > 0) {
+      let node = document.createElement("svg");
+      node.innerHTML = Helpers.attachmentIconHTML();
+      const _element = _elements[0];
+      if (!_element) return;
+
+      if (_element?.children.length <= 0) _elements[0].appendChild(node);
+    }
+  }
+
+  appendImageIcon() {
+    const _elements = document.getElementsByClassName("ql-imageupload");
+
+    if (_elements.length > 0) {
+      let node = document.createElement("svg");
+      node.innerHTML = Helpers.imageIconHtml();
+      const _element = _elements[0];
+      if (!_element) return;
+
+      if (_element?.children.length <= 0) _elements[0].appendChild(node);
+    }
+  }
+
+  appendVideoIcon() {
+    const _elements = document.getElementsByClassName("ql-videoupload");
 
     if (_elements.length > 0) {
       let node = document.createElement("svg");
@@ -41,6 +67,8 @@ class BaseHandler {
   applyForToolbar() {
     var toolbar = this.quill.getModule("toolbar");
     this.appendAttachmentIcon();
+    this.appendImageIcon();
+    this.appendVideoIcon();
 
     this.loading = document.getElementById(
       `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
