@@ -25,7 +25,7 @@ class BaseHandler {
       );
   }
 
-  appendAttachmentIcon() {
+  appendAttachmentUploadIcon() {
     const _elements = document.getElementsByClassName("ql-attachmentupload");
 
     if (_elements.length > 0) {
@@ -38,7 +38,7 @@ class BaseHandler {
     }
   }
 
-  appendImageIcon() {
+  appendImageUploadIcon() {
     const _elements = document.getElementsByClassName("ql-imageupload");
 
     if (_elements.length > 0) {
@@ -51,7 +51,7 @@ class BaseHandler {
     }
   }
 
-  appendVideoIcon() {
+  appendVideoUploadIcon() {
     const _elements = document.getElementsByClassName("ql-videoupload");
 
     if (_elements.length > 0) {
@@ -80,8 +80,9 @@ class BaseHandler {
   applyForToolbar() {
     var toolbar = this.quill.getModule("toolbar");
     this.appendAttachmentIcon();
-    this.appendImageIcon();
-    this.appendVideoIcon();
+    this.appendImageUploadIcon();
+    this.appendVideoUploadIcon();
+    this.changeVideoIcon();
 
     this.loading = document.getElementById(
       `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
