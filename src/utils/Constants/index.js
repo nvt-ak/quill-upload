@@ -49,9 +49,9 @@ export default {
     }
   `,
   blots: {
-    video: "videoUpload",
-    image: "imageUpload",
-    attachment: "attachmentUpload",
+    video: "videoupload",
+    image: "imageupload",
+    attachment: "attachmentupload",
   },
   LOADING_CLASS_NAME: "meter",
   NONE_DISPLAY_CLASS_NAME: "none-display",
