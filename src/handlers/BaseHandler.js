@@ -79,7 +79,7 @@ class BaseHandler {
 
   applyForToolbar() {
     var toolbar = this.quill.getModule("toolbar");
-    this.appendAttachmentIcon();
+    this.appendAttachmentUploadIcon();
     this.appendImageUploadIcon();
     this.appendVideoUploadIcon();
     this.changeVideoIcon();
