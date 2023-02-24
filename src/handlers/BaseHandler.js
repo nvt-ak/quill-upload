@@ -56,7 +56,7 @@ class BaseHandler {
 
     if (_elements.length > 0) {
       let node = document.createElement("svg");
-      node.innerHTML = Helpers.attachmentIconHTML();
+      node.innerHTML = Helpers.videoIconHtml();
       const _element = _elements[0];
       if (!_element) return;
 
