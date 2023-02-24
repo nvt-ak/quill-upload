@@ -43,7 +43,7 @@ class BaseHandler {
 
     if (_elements.length > 0) {
       let node = document.createElement("svg");
-      node.innerHTML = Helpers.imageIconHtml();
+      node.innerHTML = Helpers.imageIconHTML();
       const _element = _elements[0];
       if (!_element) return;
 
@@ -56,7 +56,7 @@ class BaseHandler {
 
     if (_elements.length > 0) {
       let node = document.createElement("svg");
-      node.innerHTML = Helpers.videoIconHtml();
+      node.innerHTML = Helpers.videoIconHTML();
       const _element = _elements[0];
       if (!_element) return;
 

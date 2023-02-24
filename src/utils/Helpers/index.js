@@ -21,7 +21,7 @@ export default {
   imageIconHTML: function () {
     return `<svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"> <rect class="ql-stroke" height="10" width="12" x="3" y="4"></rect> <circle class="ql-fill" cx="6" cy="7" r="1"></circle><polyline class="ql-even ql-fill" points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline> </svg>`;
   },
-  videoIconHtml: function() {
+  videoIconHTML: function() {
     return `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="18" height="18" fill="#1E1E1E"/>
               <g clip-path="url(#clip0_0_1)">
