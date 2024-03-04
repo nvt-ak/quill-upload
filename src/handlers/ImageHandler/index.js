@@ -14,7 +14,7 @@ class ImageHandler extends BaseHandler {
   }
 
   fileChanged() {
-    const file = this.loadFile(this);
+    const file = this.fileHolder.files[0];
     const extension = file.name.split(".").pop();
 
     if (!this.isImage(extension)) {
@@ -23,7 +23,8 @@ class ImageHandler extends BaseHandler {
       );
       return;
     }
-
+  
+    this.loadFile(this);
     this.embedFile(file);
   }
 }
