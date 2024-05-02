@@ -1,3 +1,5 @@
+Want to show me some ❤️ for the hard work I do on this gem? You can use the following PayPal link: [https://paypal.me/nvtit93](https://paypal.me/nvtit93). Any amount is welcome and let me tell you it feels good to be appreciated. Even a dollar makes me super excited about all of this.
+
 # quill-upload
 
 A plugin for uploading image, video, attachment in Quill 🌇
