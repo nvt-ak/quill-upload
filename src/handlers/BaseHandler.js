@@ -235,7 +235,9 @@ class BaseHandler {
   }
 
   isVideo(extension) {
-    return /(mp4|m4a|3gp|f4a|m4b|m4r|f4b|mov|flv|avi|ogg)$/i.test(extension);
+    return /(mp4|m4a|3gp|f4a|m4b|m4r|f4b|mov|flv|avi|ogg|webm)$/i.test(
+      extension
+    );
   }
 
   isAttachment(extension) {
