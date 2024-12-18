@@ -1,7 +1,7 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+const webpack = require("webpack");
 module.exports = {
   entry: {
     workboard: "./src/index.js",
@@ -14,6 +14,9 @@ module.exports = {
   resolve: {
     fallback: {
       path: require.resolve("path-browserify"),
+      assert: require.resolve("assert/"),
+      crypto: require.resolve("crypto-browserify"),
+      process: require.resolve("process/browser"), // Add this line
     },
     alias: {
       "quill-upload": path.resolve(__dirname, "../src"),
@@ -59,6 +62,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       filename: "index.html",
+    }),
+    new webpack.ProvidePlugin({
+      process: "process/browser",
     }),
   ],
 };

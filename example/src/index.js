@@ -1,4 +1,5 @@
 const Quill = require("quill");
+const ImageKit = require("imagekit");
 require("quill/dist/quill.snow.css");
 const {
   ImageHandler,
@@ -16,29 +17,41 @@ var Block = Quill.import("blots/block");
 Block.tagName = "DIV";
 Quill.register(Block, true);
 
+var imagekit = new ImageKit({
+  privateKey: "private_JGEF7P/FLHhcDwAgcHkk6gwN4ls=",
+  publicKey: "public_J+oJUIpERZKorlTJdJs/8uhugl4=",
+  urlEndpoint: "https://ik.imagekit.io/jq3pmfklv",
+  authenticationEndpoint: "http://localhost:3000/auth",
+});
+
 // Upload handler function
 const _onUpload = async function (file, resolve) {
   try {
-    const formData = new FormData();
-    formData.append("image", file);
-    // Thay YOUR_API_KEY bằng API key của bạn từ imgbb.com
-    formData.append("key", "357bc59cbf76e5423ce7513e668acc09");
+    // const formData = new FormData();
+    // formData.append("image", file);
+    // // Thay YOUR_API_KEY bằng API key của bạn từ imgbb.com
+    // // formData.append("key", "357bc59cbf76e5423ce7513e668acc09");
 
-    const response = await fetch("https://api.imgbb.com/1/upload", {
-      method: "POST",
-      body: formData,
-    });
+    // const response = await fetch(
+    //   "https://sandbox.api.video/auth/t0r0tbc5CvJ8nSglGRd8qj91dHFGfg4JMzyCKch2ghy",
+    //   {
+    //     method: "POST",
+    //     body: formData,
+    //   }
+    // );
 
-    if (!response.ok) {
-      throw new Error("Upload failed");
-    }
+    imagekit.upload(
+      {
+        file: file,
+        fileName: "abc1.jpg",
+        tags: ["tag1"],
+      },
+      function (err, result) {
+        console.log("upload success", result.url);
 
-    const result = await response.json();
-    if (result.data && result.data.url) {
-      resolve(result.data.url);
-    } else {
-      throw new Error("Invalid response format");
-    }
+        resolve(result.url);
+      }
+    );
   } catch (error) {
     console.error("Upload error:", error);
     resolve("https://via.placeholder.com/300?text=Upload+Failed");
