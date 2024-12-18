@@ -1,5 +1,4 @@
 const Quill = require("quill");
-Quill.debug("error");
 require("quill/dist/quill.snow.css");
 const {
   ImageHandler,
@@ -7,111 +6,96 @@ const {
   AttachmentHandler,
 } = require("quill-upload");
 
+// Register modules
 Quill.register("modules/imageHandler", ImageHandler);
 Quill.register("modules/videoHandler", VideoHandler);
 Quill.register("modules/attachmentHandler", AttachmentHandler);
 
+// Configure Block for Quill
 var Block = Quill.import("blots/block");
 Block.tagName = "DIV";
 Quill.register(Block, true);
 
-const _onUpload = function (fd, resolve) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://upload.imagekit.io/api/v1/files/upload");
-  xhr.setRequestHeader(
-    "Authorization",
-    "Basic cHJpdmF0ZV9LKzNFRGJnMXRQOXBsejlvOGhkd1J0bkZ0bjQ9Og=="
-  );
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
+// Upload handler function
+const _onUpload = async function (file, resolve) {
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+    // Thay YOUR_API_KEY bằng API key của bạn từ imgbb.com
+    formData.append("key", "357bc59cbf76e5423ce7513e668acc09");
 
-      resolve(response.url); // Must resolve as a link to the image
+    const response = await fetch("https://api.imgbb.com/1/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Upload failed");
     }
-  };
 
-  xhr.send(fd);
+    const result = await response.json();
+    if (result.data && result.data.url) {
+      resolve(result.data.url);
+    } else {
+      throw new Error("Invalid response format");
+    }
+  } catch (error) {
+    console.error("Upload error:", error);
+    resolve("https://via.placeholder.com/300?text=Upload+Failed");
+  }
 };
 
-const _onAttachment = function (fd, resolve) {
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://api.pdf.co/v1/file/upload");
-  xhr.setRequestHeader(
-    "x-api-key",
-    "tainv@its-global.vn_f6eab0d85bf5b00a8df529806894afb788aa"
-  );
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-
-      resolve(response.url); // Must resolve as a link to the image
-    }
-  };
-
-  xhr.send(fd);
-};
-
-const quill = new Quill("#editor", {
-  theme: "snow",
-  modules: {
-    toolbar: [
-      [{ font: [] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ["bold", "italic", "underline", "strike"], // toggled buttons
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-
-        { indent: "-1" },
-        { align: [] },
-        { indent: "+1" },
+// Initialize Quill
+document.addEventListener("DOMContentLoaded", () => {
+  const quill = new Quill("#editor", {
+    theme: "snow",
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, false] }],
+        ["bold", "italic", "underline"],
+        ["image", "video", "attachment"],
       ],
-      ["link", "image", "video", "attachment"],
-      ["blockquote", "code-block"],
-      [{ script: "sub" }, { script: "super" }], // superscript/subscript
-      [{ color: [] }, { background: [] }], // outdent/indent
-    ],
-    imageHandler: {
-      upload: (file) => {
-        // return a Promise that resolves in a link to the uploaded image
-        return new Promise((resolve) => {
-          const fd = new FormData();
-          fd.append("file", file);
-          fd.append("fileName", file.name);
-
-          _onUpload(fd, resolve);
-        });
+      imageHandler: {
+        upload: (file) => {
+          return new Promise((resolve) => {
+            if (file.size > 10 * 1024 * 1024) {
+              console.warn("File too large:", file.name);
+              resolve("https://via.placeholder.com/300?text=File+Too+Large");
+              return;
+            }
+            _onUpload(file, resolve);
+          });
+        },
+      },
+      videoHandler: {
+        upload: (file) => {
+          return new Promise((resolve) => {
+            if (file.size > 50 * 1024 * 1024) {
+              console.warn("File too large:", file.name);
+              resolve("https://via.placeholder.com/300?text=File+Too+Large");
+              return;
+            }
+            _onUpload(file, resolve);
+          });
+        },
+      },
+      attachmentHandler: {
+        upload: (file) => {
+          return new Promise((resolve) => {
+            if (file.size > 20 * 1024 * 1024) {
+              console.warn("File too large:", file.name);
+              resolve("https://via.placeholder.com/300?text=File+Too+Large");
+              return;
+            }
+            _onUpload(file, resolve);
+          });
+        },
       },
     },
-    videoHandler: {
-      upload: (file) => {
-        // return a Promise that resolves in a link to the uploaded image
-        return new Promise((resolve) => {
-          const fd = new FormData();
-          fd.append("file", file);
-          fd.append("fileName", file.name);
+  });
 
-          _onUpload(fd, resolve);
-        });
-      },
-    },
-    attachmentHandler: {
-      upload: (file) => {
-        // return a Promise that resolves in a link to the uploaded image
-        return new Promise((resolve) => {
-          const fd = new FormData();
-
-          fd.append("file", file);
-          fd.append("name", file.name);
-
-          _onAttachment(fd, resolve);
-        });
-      },
-    },
-  },
-  placeholder: "please write something...",
+  // Add output button handler
+  document.getElementById("output")?.addEventListener("click", () => {
+    console.log(quill.root.innerHTML);
+  });
 });
-
-document.getElementById("output").onclick = function () {
-  console.log(quill.root.innerHTML);
-};

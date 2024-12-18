@@ -1,8 +1,6 @@
 const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -14,7 +12,12 @@ module.exports = {
   },
   mode: "development",
   resolve: {
-    fallback: { path: require.resolve("path-browserify") },
+    fallback: {
+      path: require.resolve("path-browserify"),
+    },
+    alias: {
+      "quill-upload": path.resolve(__dirname, "../src"),
+    },
   },
   module: {
     rules: [
@@ -24,26 +27,32 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: "babel-loader",
-        options: {
-          presets: ["@babel/preset-env"],
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+            plugins: [["@babel/plugin-transform-runtime"]],
+          },
         },
       },
     ],
   },
   devServer: {
-    static: "./dist",
-  },
-  optimization: {
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          compress: {
-            drop_console: true,
-          },
-        },
-      }),
-    ],
+    static: {
+      directory: path.join(__dirname, "dist"),
+    },
+    compress: false,
+    port: 3000,
+    hot: false,
+    client: {
+      webSocketURL: {
+        hostname: "localhost",
+        pathname: "/ws",
+        port: 3000,
+      },
+    },
+    webSocketServer: "ws",
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -51,6 +60,5 @@ module.exports = {
       template: "./src/index.html",
       filename: "index.html",
     }),
-    new UglifyJSPlugin(),
   ],
 };

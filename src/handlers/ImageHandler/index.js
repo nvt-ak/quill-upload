@@ -14,18 +14,25 @@ class ImageHandler extends BaseHandler {
   }
 
   fileChanged() {
-    const file = this.fileHolder.files[0];
-    const extension = file.name.split(".").pop();
+    const files = Array.from(this.fileHolder.files);
 
-    if (!this.isImage(extension)) {
-      console.warn(
-        "[Wrong Format] Format was wrong, please try with image format correctly!!"
-      );
-      return;
-    }
-  
-    this.loadFile(this);
-    this.embedFile(file);
+    files.forEach((file) => {
+      const extension = file.name.split(".").pop();
+
+      if (!this.isImage(extension)) {
+        console.warn(
+          "[Wrong Format] Format was wrong, please try with image format correctly!!"
+        );
+        return;
+      }
+
+      const loadedFile = this.loadFile(this, file);
+      if (loadedFile) {
+        this.embedFile(loadedFile);
+      }
+    });
+
+    this.isFirstFile = false;
   }
 }
 

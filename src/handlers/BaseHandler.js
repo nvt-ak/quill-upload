@@ -2,10 +2,14 @@ import { Constants, Helpers } from "../utils";
 import Styled from "./Styled";
 
 class BaseHandler {
-  constructor(quill, options) {
+  constructor(quill, options = {}) {
     this.quill = quill;
     this.options = options;
     this.range = null;
+    this.fileHolder = null;
+    this.placeholders = new Map();
+    this.isFirstFile = false;
+    this.currentIndex = 0;
     new Styled().apply();
 
     this.loading = document.getElementById(
@@ -54,9 +58,11 @@ class BaseHandler {
     const _accpepted =
       this.handler === "attachment" ? "*" : `${this.handler}/*`;
     this.range = this.quill.getSelection();
+    this.currentIndex = this.range ? this.range.index : 0;
     this.fileHolder = document.createElement("input");
     this.fileHolder.setAttribute("type", "file");
     this.fileHolder.setAttribute("accept", _accpepted);
+    this.fileHolder.setAttribute("multiple", "true");
     this.fileHolder.onchange = this.fileChanged.bind(this);
     this.fileHolder.click();
   }
@@ -121,65 +127,107 @@ class BaseHandler {
   }
 
   startLoading() {
-    if (this.loading) {
-      this.loading.setAttribute("class", Constants.LOADING_CLASS_NAME);
-      this.updateProgress("start");
-    }
+    const eStyle = document.createElement("style");
+    eStyle.type = "text/css";
+    document.getElementsByTagName("head")[0].appendChild(eStyle);
+    eStyle.appendChild(document.createTextNode(Constants.DEFAULT_STYLES));
   }
 
-  loadFile(context) {
-    this.startLoading();
-
-    const file = context.fileHolder.files[0];
-    this.handlerId = Helpers.generateID();
-
-    const fileReader = new FileReader();
-    fileReader.addEventListener(
-      "load",
-      () => {
-        this.insertBase64Data(fileReader.result, this.handlerId);
-      },
-      false
-    );
-
-    if (!file) {
-      console.warn("[File not found] Something was wrong, please try again!!");
-      return;
+  loadFile(context, file) {
+    if (!this.isFirstFile) {
+      this.startLoading();
+      this.isFirstFile = true;
     }
 
-    fileReader.readAsDataURL(file);
+    const placeholderId = `quill-upload-${Date.now()}-${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
+
+    this.insertPlaceholder(placeholderId);
+
+    this.placeholders.set(file, {
+      id: placeholderId,
+      index: this.currentIndex,
+    });
+
+    this.currentIndex++;
 
     return file;
   }
 
-  embedFile(file) {
-    this.options.upload(file).then(
-      (url) => {
-        this.insertFileToEditor(url);
-        this.removeLoadingClass();
-      },
-      (error) => {
-        console.warn(error.message);
+  insertToEditor(url, index) {
+    this.quill.insertEmbed(index, this.handler, url);
+  }
+
+  insertPlaceholder(id) {
+    const placeholderUrl =
+      "https://via.placeholder.com/100x100?text=Uploading...";
+
+    this.quill.insertEmbed(this.currentIndex, this.handler, placeholderUrl);
+
+    setTimeout(() => {
+      const images = this.quill.root.querySelectorAll("img");
+      for (let img of images) {
+        if (
+          img.src.includes("placeholder.com") &&
+          !img.hasAttribute("data-placeholder-id")
+        ) {
+          img.setAttribute("data-placeholder-id", id);
+          break;
+        }
       }
-    );
+    }, 0);
   }
 
-  insertBase64Data(url) {
-    const range = this.range;
-    this.quill.insertEmbed(
-      range.index,
-      this.handler,
-      `${this.handlerId}${Constants.ID_SPLIT_FLAG}${url}`
-    );
+  embedFile(file) {
+    if (!file) return;
+
+    const upload = this.options.upload || (() => {});
+    const placeholderInfo = this.placeholders.get(file);
+
+    if (!placeholderInfo) return;
+
+    upload(file)
+      .then((url) => {
+        if (url) {
+          this.insertFileToEditor(url, placeholderInfo.id);
+        }
+      })
+      .catch((error) => {
+        console.error("Upload error:", error);
+        this.insertFileToEditor(
+          "https://via.placeholder.com/300?text=Upload+Failed",
+          placeholderInfo.id
+        );
+      })
+      .finally(() => {
+        this.placeholders.delete(file);
+      });
   }
 
-  insertFileToEditor(url) {
-    const el = document.getElementById(this.handlerId);
-    if (el) {
-      el.setAttribute("src", url);
-      el.removeAttribute("id");
-      el.classList.remove(Constants.QUILL_UPLOAD_HOLDER_CLASS_NAME);
+  insertFileToEditor(url, placeholderId) {
+    if (!placeholderId) return;
+
+    const placeholder = this.quill.root.querySelector(
+      `img[data-placeholder-id="${placeholderId}"]`
+    );
+    if (placeholder) {
+      placeholder.src = url;
+      placeholder.removeAttribute("data-placeholder-id");
     }
+  }
+
+  fileChanged() {
+    const files = Array.from(this.fileHolder.files);
+
+    this.currentIndex = this.range ? this.range.index : 0;
+
+    files.forEach((file) => {
+      this.loadFile(null, file);
+      this.embedFile(file);
+    });
+
+    this.fileHolder.value = "";
   }
 
   isImage(extension) {
@@ -192,6 +240,10 @@ class BaseHandler {
 
   isAttachment(extension) {
     return extension instanceof String;
+  }
+
+  destroy() {
+    this.placeholders.clear();
   }
 }
 
