@@ -69,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ["image", "video", "attachment"],
       ],
       imageHandler: {
+        imageClass: "custom-image-class",
         upload: (file) => {
           return new Promise((resolve) => {
             if (file.size > 10 * 1024 * 1024) {

@@ -156,7 +156,54 @@ class BaseHandler {
   }
 
   insertToEditor(url, index) {
+    let defaultClass = "";
+    switch (this.handler) {
+      case Constants.blots.image:
+        defaultClass = Constants.DEFAULT_IMAGE_CLASS;
+        break;
+      case Constants.blots.video:
+        defaultClass = Constants.DEFAULT_VIDEO_CLASS;
+        break;
+      case Constants.blots.attachment:
+        defaultClass = Constants.DEFAULT_ATTACHMENT_CLASS;
+        break;
+    }
+
+    const existingNode = this.quill.root.querySelector(
+      `[data-placeholder-id="${this.handlerId}"]`
+    );
+    const existingClasses = existingNode
+      ? existingNode.getAttribute("class")
+      : defaultClass;
+
+    if (existingNode) {
+      existingNode.remove();
+    }
+
     this.quill.insertEmbed(index, this.handler, url);
+
+    setTimeout(() => {
+      const selector =
+        this.handler === Constants.blots.image
+          ? `img[src="${url}"]`
+          : this.handler === Constants.blots.video
+          ? `iframe[src="${url}"]`
+          : `div[href="${url}"]`;
+
+      const newNode = this.quill.root.querySelector(selector);
+      if (newNode) {
+        if (existingClasses) {
+          newNode.setAttribute("class", existingClasses);
+        } else {
+          newNode.classList.add(defaultClass);
+        }
+
+        const parentDiv = newNode.closest(".ql-editor > *");
+        if (parentDiv) {
+          parentDiv.classList.add(`${defaultClass}-wrapper`);
+        }
+      }
+    }, 0);
   }
 
   insertPlaceholder(id) {
@@ -173,6 +220,11 @@ class BaseHandler {
           !img.hasAttribute("data-placeholder-id")
         ) {
           img.setAttribute("data-placeholder-id", id);
+          img.classList.add(Constants.DEFAULT_IMAGE_CLASS);
+          const parentDiv = img.closest(".ql-editor > *");
+          if (parentDiv) {
+            parentDiv.classList.add(`${Constants.DEFAULT_IMAGE_CLASS}-wrapper`);
+          }
           break;
         }
       }
