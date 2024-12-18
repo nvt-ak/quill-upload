@@ -6,10 +6,11 @@ import { ImageBlot } from "../../blots";
 Quill.register("blots/image", ImageBlot);
 
 class ImageHandler extends BaseHandler {
-  constructor(quill, options) {
+  constructor(quill, options = {}) {
     super(quill, options);
 
     this.handler = Constants.blots.image;
+    this.customImageClass = options.imageClass || "";
     this.applyForToolbar();
   }
 
@@ -33,6 +34,13 @@ class ImageHandler extends BaseHandler {
     });
 
     this.isFirstFile = false;
+  }
+
+  insertToEditor(url, index) {
+    const value = this.customImageClass
+      ? `${url}${Constants.CLASS_SPLIT_FLAG}${this.customImageClass}`
+      : url;
+    this.quill.insertEmbed(index, this.handler, value);
   }
 }
 

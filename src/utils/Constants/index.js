@@ -1,8 +1,12 @@
 export default {
   ID_SPLIT_FLAG: "__ID_SPLIT__",
+  CLASS_SPLIT_FLAG: "__CLASS_SPLIT__",
   IMAGE_LOADING_CLASS_NAME: "image-loading-for-quill-upload",
   VIDEO_LOADING_CLASS_NAME: "video-loading-for-quill-upload",
   QUILL_UPLOAD_HOLDER_CLASS_NAME: "quill-upload-progress",
+  DEFAULT_IMAGE_CLASS: "quill-image",
+  DEFAULT_VIDEO_CLASS: "quill-video",
+  DEFAULT_ATTACHMENT_CLASS: "quill-attachment",
   DEFAULT_STYLES: `
     .image-loading-for-quill-upload {
       display: inline-block;
