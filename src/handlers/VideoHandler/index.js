@@ -13,17 +13,25 @@ class VideoHandler extends BaseHandler {
   }
 
   fileChanged() {
-    const file = this.loadFile(this);
-    const extension = file.name.split(".").pop();
+    const files = Array.from(this.fileHolder.files);
 
-    if (!this.isVideo(extension)) {
-      console.warn(
-        "[Wrong Format] Format was wrong, please try with video format correctly!!"
-      );
-      return;
-    }
+    files.forEach((file) => {
+      const extension = file.name.split(".").pop();
 
-    this.embedFile(file);
+      if (!this.isVideo(extension)) {
+        console.warn(
+          "[Wrong Format] Format was wrong, please try with video format correctly!!"
+        );
+        return;
+      }
+
+      const loadedFile = this.loadFile(this, file);
+      if (loadedFile) {
+        this.embedFile(loadedFile);
+      }
+    });
+
+    this.fileHolder.value = "";
   }
 }
 
