@@ -68,20 +68,31 @@ class BaseHandler {
   }
 
   findKeyframesRule(rule) {
-    var ss = document.styleSheets;
     const _keyframes = [];
-
-    for (var i = 0; i < ss.length; ++i) {
-      for (var j = 0; j < ss[i].cssRules.length; ++j) {
-        if (
-          ss[i].cssRules[j].type == window.CSSRule.WEBKIT_KEYFRAMES_RULE &&
-          ss[i].cssRules[j].name.includes(rule)
-        ) {
-          _keyframes.push(ss[i].cssRules[j]);
+    try {
+      const ss = document.styleSheets;
+      for (let i = 0; i < ss.length; ++i) {
+        if (!ss[i].href || ss[i].href.startsWith(window.location.origin)) {
+          try {
+            const rules = ss[i].cssRules || ss[i].rules;
+            for (let j = 0; j < rules.length; ++j) {
+              if (
+                rules[j].type === CSSRule.KEYFRAMES_RULE ||
+                rules[j].type === CSSRule.WEBKIT_KEYFRAMES_RULE
+              ) {
+                if (rules[j].name.includes(rule)) {
+                  _keyframes.push(rules[j]);
+                }
+              }
+            }
+          } catch (e) {
+            continue;
+          }
         }
       }
+    } catch (e) {
+      console.warn("Cannot access stylesheet rules:", e);
     }
-
     return _keyframes;
   }
 
