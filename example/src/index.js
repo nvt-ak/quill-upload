@@ -27,19 +27,6 @@ var imagekit = new ImageKit({
 // Upload handler function
 const _onUpload = async function (file, resolve) {
   try {
-    // const formData = new FormData();
-    // formData.append("image", file);
-    // // Thay YOUR_API_KEY bằng API key của bạn từ imgbb.com
-    // // formData.append("key", "357bc59cbf76e5423ce7513e668acc09");
-
-    // const response = await fetch(
-    //   "https://sandbox.api.video/auth/t0r0tbc5CvJ8nSglGRd8qj91dHFGfg4JMzyCKch2ghy",
-    //   {
-    //     method: "POST",
-    //     body: formData,
-    //   }
-    // );
-
     imagekit.upload(
       {
         file: file,
