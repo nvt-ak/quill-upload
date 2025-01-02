@@ -9,16 +9,13 @@ class ImageBlot extends BlockEmbed {
     let src;
     let customClass;
 
-    console.log("ImageBlot create value:", value); // Debug log
-
-    // Tách ID nếu có
-    const idParts = `${value}`.split(Constants.ID_SPLIT_FLAG);
+    value = String(value);
+    const idParts = value.split(Constants.ID_SPLIT_FLAG);
     if (idParts.length > 1) {
       id = idParts[0];
-      value = idParts[1];
+      value = String(idParts[1]);
     }
 
-    // Tách class nếu có
     const classParts = value.split(Constants.CLASS_SPLIT_FLAG);
     if (classParts.length > 1) {
       src = classParts[0];
@@ -26,8 +23,6 @@ class ImageBlot extends BlockEmbed {
     } else {
       src = value;
     }
-
-    console.log("Parsed values:", { id, src, customClass }); // Debug log
 
     let node = super.create();
 
@@ -39,7 +34,6 @@ class ImageBlot extends BlockEmbed {
       node.setAttribute("id", id);
     }
 
-    // Thêm custom class nếu có
     if (customClass) {
       const classNames = customClass.split(" ").filter(Boolean);
       console.log("Adding classes:", classNames); // Debug log
@@ -48,12 +42,9 @@ class ImageBlot extends BlockEmbed {
       });
     }
 
-    // Luôn thêm class mặc định nếu được cấu hình
     if (this.className) {
       node.classList.add(this.className);
     }
-
-    console.log("Final node:", node.outerHTML); // Debug log
 
     return node;
   }
