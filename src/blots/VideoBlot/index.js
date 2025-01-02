@@ -24,7 +24,6 @@ class VideoBlot extends BlockEmbed {
       node.setAttribute("id", id);
     }
 
-    // Set non-format related attributes with static values
     node.setAttribute("frameborder", "0");
     node.setAttribute("allowfullscreen", true);
 
@@ -32,7 +31,6 @@ class VideoBlot extends BlockEmbed {
   }
 
   static formats(node) {
-    // We still need to report unregistered embed formats
     let format = {};
     if (node.hasAttribute("height")) {
       format.height = node.getAttribute("height");
@@ -48,7 +46,6 @@ class VideoBlot extends BlockEmbed {
   }
 
   format(name, value) {
-    // Handle unregistered embed formats
     if (name === "height" || name === "width") {
       if (value) {
         this.domNode.setAttribute(name, value);
