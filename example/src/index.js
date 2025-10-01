@@ -41,7 +41,7 @@ const _onUpload = async function (file, resolve) {
     );
   } catch (error) {
     console.error("Upload error:", error);
-    resolve("https://via.placeholder.com/300?text=Upload+Failed");
+    resolve("https://placehold.co/300x200/FEE/C33?text=Upload+Failed");
   }
 };
 
@@ -57,11 +57,18 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
       imageHandler: {
         imageClass: "custom-image-class",
+        // Optional: Configure placeholder images (using placehold.co as an example)
+        placeholderImageUploading:
+          "https://placehold.co/100x100/EEE/999?text=Uploading...",
+        placeholderImageError:
+          "https://placehold.co/300x200/FEE/C33?text=Upload+Failed",
         upload: (file) => {
           return new Promise((resolve) => {
             if (file.size > 10 * 1024 * 1024) {
               console.warn("File too large:", file.name);
-              resolve("https://via.placeholder.com/300?text=File+Too+Large");
+              resolve(
+                "https://placehold.co/300x200/FEE/C33?text=File+Too+Large"
+              );
               return;
             }
             _onUpload(file, resolve);
@@ -69,11 +76,18 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       },
       videoHandler: {
+        // Optional: Configure placeholder images
+        placeholderImageUploading:
+          "https://placehold.co/100x100/EEE/999?text=Uploading...",
+        placeholderImageError:
+          "https://placehold.co/300x200/FEE/C33?text=Upload+Failed",
         upload: (file) => {
           return new Promise((resolve) => {
             if (file.size > 50 * 1024 * 1024) {
               console.warn("File too large:", file.name);
-              resolve("https://via.placeholder.com/300?text=File+Too+Large");
+              resolve(
+                "https://placehold.co/300x200/FEE/C33?text=File+Too+Large"
+              );
               return;
             }
             _onUpload(file, resolve);
@@ -81,11 +95,18 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       },
       attachmentHandler: {
+        // Optional: Configure placeholder images
+        placeholderImageUploading:
+          "https://placehold.co/100x100/EEE/999?text=Uploading...",
+        placeholderImageError:
+          "https://placehold.co/300x200/FEE/C33?text=Upload+Failed",
         upload: (file) => {
           return new Promise((resolve) => {
             if (file.size > 20 * 1024 * 1024) {
               console.warn("File too large:", file.name);
-              resolve("https://via.placeholder.com/300?text=File+Too+Large");
+              resolve(
+                "https://placehold.co/300x200/FEE/C33?text=File+Too+Large"
+              );
               return;
             }
             _onUpload(file, resolve);

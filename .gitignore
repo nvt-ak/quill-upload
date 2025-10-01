@@ -13,3 +13,4 @@ dist
 .eslintcache
 .vscode
 package-lock.json
+example/uploads
