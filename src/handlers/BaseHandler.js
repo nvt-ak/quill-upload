@@ -12,6 +12,15 @@ class BaseHandler {
     this.currentIndex = 0;
     new Styled().apply();
 
+    // Configure placeholder images with fallback defaults
+    this.placeholderImageUploading =
+      options.placeholderImageUploading ||
+      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23ddd' width='100' height='100'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='14' fill='%23999'%3EUploading...%3C/text%3E%3C/svg%3E";
+
+    this.placeholderImageError =
+      options.placeholderImageError ||
+      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect fill='%23fee' width='300' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='16' fill='%23c33'%3EUpload Failed%3C/text%3E%3C/svg%3E";
+
     this.loading = document.getElementById(
       `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
     );
@@ -218,8 +227,7 @@ class BaseHandler {
   }
 
   insertPlaceholder(id) {
-    const placeholderUrl =
-      "https://via.placeholder.com/100x100?text=Uploading...";
+    const placeholderUrl = this.placeholderImageUploading;
 
     this.quill.insertEmbed(this.currentIndex, this.handler, placeholderUrl);
 
@@ -227,7 +235,7 @@ class BaseHandler {
       const images = this.quill.root.querySelectorAll("img");
       for (let img of images) {
         if (
-          img.src.includes("placeholder.com") &&
+          img.src === placeholderUrl &&
           !img.hasAttribute("data-placeholder-id")
         ) {
           img.setAttribute("data-placeholder-id", id);
@@ -258,10 +266,7 @@ class BaseHandler {
       })
       .catch((error) => {
         console.error("Upload error:", error);
-        this.insertFileToEditor(
-          "https://via.placeholder.com/300?text=Upload+Failed",
-          placeholderInfo.id
-        );
+        this.insertFileToEditor(this.placeholderImageError, placeholderInfo.id);
       })
       .finally(() => {
         this.placeholders.delete(file);

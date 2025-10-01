@@ -76,6 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
       imageHandler: {
         imageClass: "custom-image-class",
+        // Optional: Configure placeholder images
+        placeholderImageUploading: "/assets/uploading-placeholder.png", // Default: inline SVG
+        placeholderImageError: "/assets/error-placeholder.png", // Default: inline SVG
         upload: (file) => {
           return new Promise((resolve) => {
             if (file.size > 10 * 1024 * 1024) {
@@ -121,6 +124,43 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 ```
+
+## Configuration Options
+
+### Placeholder Images
+
+You can customize the placeholder images shown during upload and on error:
+
+```js
+{
+  placeholderImageUploading: "/assets/uploading-placeholder.png",  // Image shown while uploading
+  placeholderImageError: "/assets/error-placeholder.png",          // Image shown on upload error
+  imageClass: "custom-image-class",                                // Custom CSS class for images
+  upload: (file) => { /* ... */ }
+}
+```
+
+**Default values**: If not specified, the module uses inline SVG placeholders that work out of the box:
+- `placeholderImageUploading`: Gray box with "Uploading..." text
+- `placeholderImageError`: Red box with "Upload Failed" text
+
+**Note**: The old `https://via.placeholder.com/` service no longer works, so custom placeholders or the provided defaults are recommended.
+
+### Image Handler Options
+- `imageClass` (string, optional): Custom CSS class to apply to uploaded images
+- `placeholderImageUploading` (string, optional): URL or data URI for the uploading placeholder
+- `placeholderImageError` (string, optional): URL or data URI for the error placeholder
+- `upload` (function, required): Function that returns a Promise resolving to the uploaded file URL
+
+### Video Handler Options
+- `placeholderImageUploading` (string, optional): URL or data URI for the uploading placeholder
+- `placeholderImageError` (string, optional): URL or data URI for the error placeholder
+- `upload` (function, required): Function that returns a Promise resolving to the uploaded file URL
+
+### Attachment Handler Options
+- `placeholderImageUploading` (string, optional): URL or data URI for the uploading placeholder
+- `placeholderImageError` (string, optional): URL or data URI for the error placeholder
+- `upload` (function, required): Function that returns a Promise resolving to the uploaded file URL
 
 ## Example
 
